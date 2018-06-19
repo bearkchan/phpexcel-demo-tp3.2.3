@@ -156,6 +156,7 @@ class IndexController extends Controller
             if (!$info = $upload->upload()) {
                 $this->error($upload->getError());
             }
+            // 将PHPExcel包以及PHPExcel.class.php文件存放在了ThinkPHP/Org/Util/PHPExcel目录下
             import("Org.Util.PHPExcel.PHPExcel");
             import("Org.Util.PHPExcel..PHPExcel.Reader.Excel5");
             $file_name = $upload->rootPath . $info['excel']['savepath'] . $info['excel']['savename'];
@@ -167,8 +168,9 @@ class IndexController extends Controller
             //     $objReader = \PHPExcel_IOFactory::createReader('Excel5');
             //     $objPHPExcel = $objReader->load($file_name, $encode = 'utf-8');
             // }
-            $filetype = \PHPExcel_IOFactory::identify($file_name);
-            $objReader = \PHPExcel_IOFactory::createReader($filetype);
+
+            $filetype = \PHPExcel_IOFactory::identify($file_name); // 自动获取文件后缀名
+            $objReader = \PHPExcel_IOFactory::createReader($filetype); //根据不同的文件后缀名进行加载对象读取器
             $objPHPExcel = $objReader->load($file_name, $encode = 'utf-8');
             $sheet = $objPHPExcel->getActiveSheet(0);
             $highestRow = $sheet->getHighestRow();//取得总行数
